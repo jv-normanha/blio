@@ -13,5 +13,10 @@
         "postcss": "^8.1.14",
         "sass": "^1.32.11",
         "vite": "^3.0.0"
+    },
+    "dependencies": {
+        "chart.js": "^3.9.1",
+        "datatables.net": "^1.12.1",
+        "datatables.net-buttons-bs5": "^2.2.3"
     }
 }

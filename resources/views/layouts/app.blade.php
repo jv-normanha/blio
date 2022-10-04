@@ -8,11 +8,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
+    <!-- o data tables -->
+    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link href="https://code.jquery.com/jquery-3.5.1.js">
+    <link href="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>

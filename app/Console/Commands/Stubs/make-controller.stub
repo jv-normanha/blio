@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers\V1;
+
+use App\Http\Controllers\Controller;
+use App\Services\GenericService;
+use Illuminate\Http\Request;
+
+class GenericController extends Controller
+{
+    public $service;
+    private $request;
+
+    public function __construct(GenericService $service, Request $request)
+    {
+        $this->service   = $service;
+        $this->request   = $request;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     */
+    public function index()
+    {
+        return $this->service->listAll();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     */
+    public function store()
+    {
+        return $this->service->store(
+            $this->request->all()
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param string $id
+     *
+     */
+    public function show(string $id)
+    {
+        return $this->service->getOne($id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param string  $id
+     *
+     */
+    public function update(string $id)
+    {
+        return $this->service->update(
+            $this->request->all(), $id
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param string $id
+     *
+     */
+    public function destroy(string $id)
+    {
+        return $this->service->delete($id);
+    }
+}

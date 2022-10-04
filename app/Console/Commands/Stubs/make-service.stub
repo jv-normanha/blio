@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Services;
+
+use App\Http\Validators\GenericValidators;
+use App\Repositories\GenericRepository;
+use App\Http\Resources\GenericResource;
+use App\Http\Resources\Collections\GenericCollection;
+use App\Traits\Services\Service;
+use App\Http\Resources\Errors\ErrorResource;
+
+
+class GenericService
+{
+    use Service;
+
+    public $repository;
+    public $validator;
+
+    public function __construct(
+        GenericRepository $repository,
+        GenericValidators $validator
+    )
+    {
+        $this->repository = $repository;
+        $this->validator = $validator;
+    }
+
+    /**
+     * Recupera todos os dados do banco
+     * @return GenericCollection
+     */
+    public function listAll()
+    {
+        $paginate = request()->get('paginate');
+        $this->repository->applyFilters();
+
+        if (!isset($paginate)) {
+            $paginate = true;
+        }
+        return new GenericCollection(
+            $this->repository->listAll(
+                $this->request['take'] ?? 10,
+                (bool) $paginate)
+            );
+    }
+
+    /**
+     * Salva um novo registro no banco
+     * @param array $data
+     */
+    public function store(array $data)
+    {
+        if ($this->validator->validate($data))
+            return new GenericResource(
+                $this->repository->store($data)
+            );
+
+        return $this->errorValidation();
+
+    }
+
+    /**
+     * Recupera um registro especifico
+     *
+     * @param string $id
+     * @return GenericResource
+     */
+    public function getOne(string $id)
+    {
+        $model = $this->repository->getById($id);
+        if ($model) {
+            return new GenericResource($model);
+        }
+        return $this->showError('Registro não encontrado');
+
+    }
+
+    /**
+     * Atualiza um registro especifico.
+     *
+     * @param string   $id
+     * @param array $data
+     * @return GenericResource|ErrorResource
+     */
+    public function update(array $data, string $id)
+    {
+        if ($this->repository->getById($id)) {
+            if ($this->validator->validate($data))
+                return new GenericResource(
+                    $this->repository->updateById($id, $data)
+                );
+
+            return $this->errorValidation();
+        }
+        return $this->showError('Registro não encontrado');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param string $id
+     * @return GenericResource|ErrorResource
+     */
+    public function delete(string $id)
+    {
+        if ($this->repository->getById($id)) {
+            return new GenericResource(
+                $this->repository->deleteById($id)
+            );
+        }
+        return $this->showError('Registro não encontrado');
+    }
+}

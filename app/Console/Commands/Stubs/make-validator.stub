@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Validators;
+
+use Illuminate\Support\Facades\Validator;
+
+/**
+ * Class GenericValidators
+ * Para saber todas as regras validas consulte
+ * https://laravel.com/docs/8.x/validation#available-validation-rules
+ * @package App\Http\Validators
+ *
+ */
+class GenericValidators
+{
+    public $errors;
+
+    public function validate(array $data, $isUpdate = false): bool
+    {
+        $validator = Validator::make($data,
+            $isUpdate ? self::rulesUpdate() : self::rules(),
+            self::messages()
+        );
+        $this->errors = $validator->fails() ? $validator->errors() : [];
+        return !$validator->fails();
+    }
+
+    /**
+    * Define as regras de validação
+    * @return array
+    *
+    */
+    static private function rules(): array
+    {
+        return [
+
+        ];
+    }
+
+    /**
+    * Define as regras de validação na atualização
+    * @return array
+    *
+    */
+    static private function rulesUpdate(): array
+    {
+        return [
+
+        ];
+    }
+
+    /**
+    * Customiza as respostas de erros
+    * @return array
+    *
+    */
+    static private function messages(): array
+    {
+        return [
+            'required' => 'O campo :attribute é obrigatório',
+            'unique' => 'Já existe um registro com este mesmo valor de :attribute'
+        ];
+    }
+}
